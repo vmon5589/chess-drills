@@ -1,0 +1,13 @@
+{
+  "name": "Chess Drills",
+  "short_name": "Chess Drills",
+  "description": "Mate puzzles and opening drills",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#1f2328",
+  "theme_color": "#1f2328",
+  "icons": [
+    { "src": "favicon.svg", "sizes": "any", "type": "image/svg+xml" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
