@@ -1,0 +1,10 @@
+
+#set up git with: 
+git remote add origin https://github.com/vmon5589/chess-drills.git
+git push -u origin main
+
+# then went to pages on git repo
+- set it to Github Actions, which apparently does the npm run build on github for each git push
+
+#now you run this for each change:
+git commit -am "Fix quiz crash when the next line is shorter" && git push
