@@ -4,6 +4,7 @@ import { Board, type BoardArrow } from '../components/Board';
 import { TRAINER_LINES } from '../lib/data';
 import { playUserMove } from '../lib/chess';
 import { MASTERY, useTrainerProgress } from '../lib/progress';
+import { OPENING_COUNT, STATS_SOURCE, frequency, percent, statsFor } from '../lib/openingStats';
 import type { TrainerLine } from '../lib/types';
 
 // SVG arrows take a literal color; CSS variables don't apply there.
@@ -42,6 +43,7 @@ function LinePicker() {
                   <span className="line-meta">
                     {l.eco} · play as {l.side === 'w' ? 'White' : 'Black'} · {Math.ceil(l.moves.length / 2)} moves
                   </span>
+                  <StatRow line={l} color={l.side} />
                   <Meter value={runs} />
                 </a>
               );
@@ -50,6 +52,53 @@ function LinePicker() {
         </section>
       ))}
     </div>
+  );
+}
+
+function StatRow({ line, color }: { line: TrainerLine; color: Color }) {
+  const s = statsFor(line, color);
+  const score = s.score.club;
+  return (
+    <dl className="stat-row">
+      <div>
+        <dt>Club rank</dt>
+        <dd>
+          #{s.rank.club} <small>of {OPENING_COUNT}</small>
+        </dd>
+      </div>
+      <div>
+        <dt>2200+ rank</dt>
+        <dd>
+          #{s.rank.strong} <small>of {OPENING_COUNT}</small>
+        </dd>
+      </div>
+      <div>
+        <dt>{color === 'w' ? 'White' : 'Black'} scores</dt>
+        {/* Compare rounded values so "52% vs avg 52%" is never highlighted. */}
+        <dd className={score !== null && percent(score) > percent(s.average.club) ? 'good' : ''}>
+          {score === null ? '–' : percent(score)}
+          <small className="below">{score === null ? 'too few games' : `avg ${percent(s.average.club)}`}</small>
+        </dd>
+      </div>
+    </dl>
+  );
+}
+
+function LineStatsPanel({ line, color }: { line: TrainerLine; color: Color }) {
+  const s = statsFor(line, color);
+  const side = color === 'w' ? 'White' : 'Black';
+  return (
+    <section className="line-stats">
+      <StatRow line={line} color={color} />
+      <p>
+        Club players reach this opening in {frequency(s.share.club)} games; 2200+ players in {frequency(s.share.strong)}.
+        {s.score.strong !== null && ` Among 2200+ players, ${side} scores ${percent(s.score.strong)} (avg ${percent(s.average.strong)}).`}
+      </p>
+      <p className="fine">
+        Ranks compare the {OPENING_COUNT} openings in this trainer. Score = wins + half of draws. {STATS_SOURCE}; club =
+        1200–1999 rating.
+      </p>
+    </section>
   );
 }
 
@@ -238,6 +287,7 @@ function Drill({ line }: { line: TrainerLine }) {
         </div>
 
         <Meter value={runs} />
+        <LineStatsPanel line={line} color={color} />
       </div>
     </div>
   );

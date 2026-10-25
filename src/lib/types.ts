@@ -9,6 +9,8 @@ export type TrainerLine = {
   name: string;
   family: string;
   moves: string[];
+  /** Ply at which the line gets its name; stats are measured there. */
+  keyPly: number;
 };
 
 export type QuizLine = { eco: string; name: string; moves: string[] };

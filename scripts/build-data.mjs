@@ -70,7 +70,7 @@ for (const row of tsv.split('\n')) {
   entries.push({ eco, name, moves: c.history() });
 }
 
-const trainer = LINES.map(({ id, title, side, moves }) => {
+const trainer = LINES.map(({ id, title, key, side, moves }) => {
   const c = new Chess();
   let match = null;
   for (const m of moves.split(' ')) {
@@ -79,7 +79,8 @@ const trainer = LINES.map(({ id, title, side, moves }) => {
   }
   if (!match) throw new Error(`No named opening found for ${id}`);
   console.log(`${id.padEnd(16)} ${match.eco} ${match.name}`);
-  return { id, title, side, eco: match.eco, name: match.name, family: match.name.split(':')[0], moves: c.history() };
+  console.log(`${''.padEnd(16)} key: ${c.history().slice(0, key).join(' ')}`);
+  return { id, title, side, eco: match.eco, name: match.name, family: match.name.split(':')[0], moves: c.history(), keyPly: key };
 });
 
 // Quiz pool: dataset lines from the same families as the trainer, short enough to recognise.

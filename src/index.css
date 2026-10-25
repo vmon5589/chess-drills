@@ -156,6 +156,9 @@ a {
 }
 
 .board {
+  /* Own stacking context so board arrows don't draw over the sticky top bar. */
+  position: relative;
+  z-index: 0;
   width: 100%;
   /* Keep the board and some controls visible in short (landscape) viewports. */
   max-width: calc(100dvh - 140px);
@@ -341,9 +344,7 @@ button.primary {
 
 /* ---------- Trainer ---------- */
 .picker h2 {
-  font-size: 0.85rem;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
+  font-size: 0.9rem;
   color: var(--muted);
   margin: 20px 0 8px;
 }
@@ -434,4 +435,52 @@ button.primary {
 .line-moves .num {
   margin-right: 4px;
   color: var(--muted);
+}
+
+/* ---------- Opening stats ---------- */
+.stat-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  margin: 4px 0 0;
+}
+
+.stat-row dt {
+  font-size: 0.7rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.stat-row dd {
+  margin: 1px 0 0;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.stat-row dd small {
+  font-weight: 400;
+  color: var(--muted);
+}
+
+.stat-row dd small.below {
+  display: block;
+  font-size: 0.8rem;
+}
+
+.stat-row dd.good {
+  color: var(--good);
+}
+
+.line-stats {
+  display: grid;
+  gap: 8px;
+  padding: 12px 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+.line-stats p {
+  margin: 0;
 }
