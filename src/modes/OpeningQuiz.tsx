@@ -70,6 +70,7 @@ export function OpeningQuiz() {
 
   const next = (lvl = level) => {
     setChosen(null);
+    setShown(0);
     setQuestion(makeQuestion(lvl));
   };
 
@@ -94,7 +95,8 @@ export function OpeningQuiz() {
   const trainerMatch =
     TRAINER_LINES.find((t) => t.name.startsWith(variation) && line.name.includes(':')) ??
     TRAINER_LINES.find((t) => t.family === familyOf(line.name));
-  const position = positions[shown];
+  // `shown` can briefly exceed a new, shorter line before the playback effect resets it.
+  const position = positions[Math.min(shown, positions.length - 1)];
 
   return (
     <div className="play-layout">
